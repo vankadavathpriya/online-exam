@@ -275,6 +275,11 @@ def certificate():
 @app.route("/send_email", methods=["POST"])
 def send_email():
 
+    import os
+    import smtplib
+    from email.mime.text import MIMEText
+    from datetime import datetime
+
     sender = os.getenv("EMAIL_USER")
     password = os.getenv("EMAIL_PASS")
 
@@ -290,31 +295,15 @@ def send_email():
     html = f"""
     <html>
     <body style="background:#f4f1ea;font-family:Georgia;text-align:center;">
-
     <div style="width:90%;margin:auto;padding:50px;background:white;border:12px solid gold;">
-
         <h3>ONLINE EXAMINATION</h3>
-
         <h1 style="color:goldenrod;">Certificate of Achievement</h1>
-
         <p>This is proudly presented to</p>
-
         <h2 style="font-size:30px;">{name}</h2>
-
         <p>for successfully passing the <b>{topic}</b> Examination</p>
-
         <p><b>Score:</b> {score} / {total}</p>
         <p><b>Date:</b> {date}</p>
-
-        <br><br>
-
-        <div style="display:flex;justify-content:space-between;">
-            <span>Instructor</span>
-            <span>Director</span>
-        </div>
-
     </div>
-
     </body>
     </html>
     """
