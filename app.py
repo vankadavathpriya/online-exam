@@ -272,59 +272,12 @@ def certificate():
     """,name=name,topic=topic,score=score,total=total,date=date,cert_id=cert_id)
 
 # ---------------- EMAIL ----------------
+
 @app.route("/send_email", methods=["POST"])
 def send_email():
+    return "<h2>Certificate Generated ✅</h2><p>Email feature disabled</p>"
 
-    import os
-    import smtplib
-    from email.mime.text import MIMEText
-    from datetime import datetime
 
-    sender = os.getenv("EMAIL_USER")
-    password = os.getenv("EMAIL_PASS")
-
-    receiver = request.form["email"]
-
-    name = session["user"]
-    topic = request.form["topic"]
-    score = request.form["score"]
-    total = request.form["total"]
-
-    date = datetime.now().strftime("%d %B %Y")
-
-    html = f"""
-    <html>
-    <body style="background:#f4f1ea;font-family:Georgia;text-align:center;">
-    <div style="width:90%;margin:auto;padding:50px;background:white;border:12px solid gold;">
-        <h3>ONLINE EXAMINATION</h3>
-        <h1 style="color:goldenrod;">Certificate of Achievement</h1>
-        <p>This is proudly presented to</p>
-        <h2 style="font-size:30px;">{name}</h2>
-        <p>for successfully passing the <b>{topic}</b> Examination</p>
-        <p><b>Score:</b> {score} / {total}</p>
-        <p><b>Date:</b> {date}</p>
-    </div>
-    </body>
-    </html>
-    """
-
-    msg = MIMEText(html, "html")
-    msg["Subject"] = "Your Exam Certificate 🎓"
-    msg["From"] = sender
-    msg["To"] = receiver
-
-try:
-    server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
-
-    server.login(sender, password)
-    server.send_message(msg)
-    server.quit()
-
-    return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
-
-except Exception as e:
-    print("EMAIL ERROR:", e)
-    return f"<h2>Email Failed ❌</h2><p>{str(e)}</p>"
 # ---------------- RUN ----------------
 if __name__=="__main__":
     app.run(debug=True)
