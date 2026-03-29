@@ -313,21 +313,18 @@ def send_email():
     msg["From"] = sender
     msg["To"] = receiver
 
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
+try:
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
 
-        server.login(sender, password)
-        server.send_message(msg)
-        server.quit()
+    server.login(sender, password)
+    server.send_message(msg)
+    server.quit()
 
-        return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
+    return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
 
-    except Exception as e:
-        print("EMAIL ERROR:", e)
-        return f"<h2>Email Failed ❌</h2><p>{str(e)}</p>"
+except Exception as e:
+    print("EMAIL ERROR:", e)
+    return f"<h2>Email Failed ❌</h2><p>{str(e)}</p>"
 # ---------------- RUN ----------------
 if __name__=="__main__":
     app.run(debug=True)
