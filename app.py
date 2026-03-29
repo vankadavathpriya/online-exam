@@ -276,8 +276,7 @@ def certificate():
 def send_email():
 
     sender = os.getenv("EMAIL_USER")
-password = os.getenv("EMAIL_PASS")
-
+    password = os.getenv("EMAIL_PASS")
 
     receiver = request.form["email"]
 
@@ -288,7 +287,6 @@ password = os.getenv("EMAIL_PASS")
 
     date = datetime.now().strftime("%d %B %Y")
 
-    # 🎓 SAME CERTIFICATE DESIGN IN EMAIL
     html = f"""
     <html>
     <body style="background:#f4f1ea;font-family:Georgia;text-align:center;">
@@ -327,20 +325,20 @@ password = os.getenv("EMAIL_PASS")
     msg["To"] = receiver
 
     try:
-    server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
-    server.ehlo()
-    server.starttls()
-    server.ehlo()
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
 
-    server.login(sender, password)
-    server.send_message(msg)
-    server.quit()
+        server.login(sender, password)
+        server.send_message(msg)
+        server.quit()
 
-    return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
+        return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
 
-except Exception as e:
-    print("EMAIL ERROR:", e)
-    return f"<h2>Email Failed ❌</h2><p>{str(e)}</p>"
+    except Exception as e:
+        print("EMAIL ERROR:", e)
+        return f"<h2>Email Failed ❌</h2><p>{str(e)}</p>"
 # ---------------- RUN ----------------
 if __name__=="__main__":
     app.run(debug=True)
