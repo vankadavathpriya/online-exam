@@ -1,1 +1,1 @@
-web: python exam.py
+web: gunicorn main:app
