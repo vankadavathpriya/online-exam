@@ -275,8 +275,9 @@ def certificate():
 @app.route("/send_email", methods=["POST"])
 def send_email():
 
-    sender = "vankadavathpriya74@gmail.com"
-    password = "hynpyfkinthaujty"
+    sender = os.getenv("EMAIL_USER")
+password = os.getenv("EMAIL_PASS")
+
 
     receiver = request.form["email"]
 
@@ -326,14 +327,20 @@ def send_email():
     msg["To"] = receiver
 
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender, password)
-        server.send_message(msg)
-        server.quit()
-        return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
-    except Exception as e:
-        return str(e)
+    server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+
+    server.login(sender, password)
+    server.send_message(msg)
+    server.quit()
+
+    return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
+
+except Exception as e:
+    print("EMAIL ERROR:", e)
+    return f"<h2>Email Failed ❌</h2><p>{str(e)}</p>"
 # ---------------- RUN ----------------
 if __name__=="__main__":
     app.run(debug=True)
