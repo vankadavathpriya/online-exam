@@ -277,7 +277,7 @@ def certificate():
 def send_email():
     try:
         sender = "vankadavathpriya74@gmail.com"
-        password = "PASTE_APP_PASSWORD_HERE"   # 🔴 your 16-letter app password
+        password = "nhrzognhfefhxsyj"   # 🔴 your 16-letter app password
 
         receiver = request.form.get("email")
 
