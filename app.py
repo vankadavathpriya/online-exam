@@ -275,49 +275,50 @@ def certificate():
 
 @app.route("/send_email", methods=["POST"])
 def send_email():
-
-    sender = "vankadavathpriya74@gmail.com"
-    password = "dozfjswnoogpgrdb"   # 🔴 paste app password
-
-    receiver = request.form["email"]
-
-    name = session["user"]
-    topic = request.form["topic"]
-    score = request.form["score"]
-    total = request.form["total"]
-
-    date = datetime.now().strftime("%d %B %Y")
-
-    html = f"""
-    <html>
-    <body style="background:#f4f1ea;font-family:Georgia;text-align:center;">
-    <div style="width:90%;margin:auto;padding:50px;background:white;border:12px solid gold;">
-        <h2>Certificate of Achievement</h2>
-        <h3>{name}</h3>
-        <p>Successfully completed <b>{topic}</b> exam</p>
-        <p>Score: {score}/{total}</p>
-        <p>Date: {date}</p>
-    </div>
-    </body>
-    </html>
-    """
-
-    msg = MIMEText(html, "html")
-    msg["Subject"] = "Your Exam Certificate 🎓"
-    msg["From"] = sender
-    msg["To"] = receiver
-
     try:
+        sender = "vankadavathpriya74@gmail.com"
+        password = "PASTE_APP_PASSWORD_HERE"   # 🔴 your 16-letter app password
+
+        receiver = request.form.get("email")
+
+        name = session.get("user", "Student")
+        topic = request.form.get("topic", "")
+        score = request.form.get("score", "")
+        total = request.form.get("total", "")
+
+        date = datetime.now().strftime("%d %B %Y")
+
+        # Certificate HTML
+        html = f"""
+        <html>
+        <body style="background:#f4f1ea;font-family:Georgia;text-align:center;">
+        <div style="width:90%;margin:auto;padding:50px;background:white;border:12px solid gold;">
+            <h2>Certificate of Achievement</h2>
+            <h3>{name}</h3>
+            <p>Completed <b>{topic}</b> Exam</p>
+            <p>Score: {score}/{total}</p>
+            <p>Date: {date}</p>
+        </div>
+        </body>
+        </html>
+        """
+
+        msg = MIMEText(html, "html")
+        msg["Subject"] = "Your Exam Certificate 🎓"
+        msg["From"] = sender
+        msg["To"] = receiver
+
+        # Send email
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(sender, password)
         server.send_message(msg)
         server.quit()
-        return "<h2>Certificate Sent Successfully ✅ Check your Email</h2>"
+
+        return "<h2>✅ Certificate Sent! Check your Email</h2>"
+
     except Exception as e:
-        return str(e)
-
-
+        return f"<h3>❌ Error:</h3><pre>{str(e)}</pre>"
 # ---------------- RUN ----------------
 if __name__=="__main__":
     app.run(debug=True)
