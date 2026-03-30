@@ -308,17 +308,21 @@ def send_email():
         msg["From"] = sender
         msg["To"] = receiver
 
-        # Send email
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender, password)
-        server.send_message(msg)
-        server.quit()
+       try:
+    server = smtplib.SMTP("smtp.gmail.com", 587)
 
-        return "<h2>✅ Certificate Sent! Check your Email</h2>"
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
 
-    except Exception as e:
-        return f"<h3>❌ Error:</h3><pre>{str(e)}</pre>"
+    server.login(sender, password)
+    server.send_message(msg)
+    server.quit()
+
+    return "<h2>Certificate Sent Successfully ✅ Check your Mail</h2>"
+
+except Exception as e:
+    return str(e)
 # ---------------- RUN ----------------
 if __name__=="__main__":
     app.run(debug=True)
